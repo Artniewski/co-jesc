@@ -1,1 +1,13 @@
+restaurants:
+- name: Pod-Latarniami
+  facebook-page:
+    id: 100063693186581
+  menu:
+    cssClass: _5pbx userContent _3576
+    duration: 7
+    keyWords: ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek']
+  characteristics:
+    priceRange: 2 # 1-4 scale
+    cuisine: Europejska
+
 

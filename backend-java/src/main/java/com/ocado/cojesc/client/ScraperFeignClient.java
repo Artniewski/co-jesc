@@ -1,20 +1,18 @@
-package com.ocado.cojesc.crawler.service;
+package com.ocado.cojesc.client;
 
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(value = "scraper")
-public class ScraperFeignClient {
+public interface ScraperFeignClient {
 
-    @RequestMapping(value = "/mock/menu",
+    @RequestMapping(value = "/{facebookId}/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<String> getPosts(@RequestBody RestaurantDto restaurantDto) {
-        return null;
-    }
+    List<String> getPosts(@PathVariable String facebookId);
 }

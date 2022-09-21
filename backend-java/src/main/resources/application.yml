@@ -5,24 +5,6 @@ cojesc:
       menu-key-words: [ 'wtorek', 'środa', 'piątek' ]
       facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
       menu-duration: 5 #days
-    - name: Pod Latarniami
-      facebook-id: podlatarniami
-      menu-key-words: [ 'wtorek', 'środa', 'piątek' ]
-      facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
-      menu-duration: 5 #days
-    - name: Pod Latarniami
-      facebook-id: podlatarniami
-      menu-key-words: [ 'wtorek', 'środa', 'piątek' ]
-      facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
-      menu-duration: 5 #days
-
-
-facebook:
-  base-url: 'https://www.facebook.com/'
-  cookie-button-selector: 'text=Zezwól tylko na niezbędne pliki cookie'
-  see-more-selector: 'text=Zobacz więcej'
-  timeout: 1000 #ms
-
 
 spring.cloud.discovery.client.simple.instances:
   scraper:

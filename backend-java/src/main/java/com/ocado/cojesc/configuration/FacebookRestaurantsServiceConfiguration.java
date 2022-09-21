@@ -1,5 +1,7 @@
 package com.ocado.cojesc.configuration;
 
+import com.ocado.cojesc.FacebookProperties;
+import com.ocado.cojesc.crawler.validator.LunchPostValidator;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

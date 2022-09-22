@@ -12,6 +12,7 @@ const getPosts = async (facebookId) => {
     const browser = await puppeteer.launch({
         headless: true,
         slowMo: 50,
+        args: ['--lang=en-GB']
     });
 
     let page = await browser.newPage();

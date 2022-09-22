@@ -1,4 +1,5 @@
 cojesc:
+  cache.eviction: 0 0 0 * * *
   restaurants:
     - name: Pod Latarniami
       facebook-id: podlatarniami

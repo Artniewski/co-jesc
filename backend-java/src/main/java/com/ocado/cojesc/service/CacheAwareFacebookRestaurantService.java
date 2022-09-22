@@ -21,7 +21,7 @@ public class CacheAwareFacebookRestaurantService {
 
     private final ScraperFeignClient client;
 
-    @Cacheable(cacheNames = { CACHE_NAME }, key = "#restaurant.name", unless = "#result == null")
+    @Cacheable(cacheNames = { CACHE_NAME }, key = "#restaurant.name", unless = "#result == null or #result.size()==0")
     public List<String> getAllPosts(Restaurant restaurant) {
         log.info("Menu for {} not found in cache. Searching for new menu.", restaurant.getName());
         return client.getPosts(restaurant.getFacebookId());

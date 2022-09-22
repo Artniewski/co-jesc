@@ -20,8 +20,14 @@ app.get("/mock/menu", async (req, res) => {
 app.get("/:fbId/menu", async (req, res) => {
     let fbId = req.params.fbId;
     console.log(fbId)
-    let posts = await scraper.getPosts(fbId);
-    res.send(posts);
+    try {
+        let posts = await scraper.getPosts(fbId);
+        res.send(posts);
+    } catch (err) {
+        console.error(err);
+        return 500;
+    }
+
 })
 
 app.listen(PORT, () => {

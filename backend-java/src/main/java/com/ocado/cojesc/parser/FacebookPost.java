@@ -1,6 +1,4 @@
-package com.ocado.cojesc.temp;
-
-import org.springframework.util.StringUtils;
+package com.ocado.cojesc.parser;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -14,7 +12,7 @@ public record FacebookPost(String facebookId, String restaurantName, String date
             String content = Arrays.stream(facebookPostLines).skip(2).collect(Collectors.joining("\n"));
             return new FacebookPost(facebookId, restaurantName, date, content);
         } catch (NullPointerException e) {
-            throw new RuntimeException("Could not parse " + facebookPost + " as FacebookPost.");
+            throw new IllegalArgumentException("Could not parse " + facebookPost + " as FacebookPost.");
         }
     }
 }

@@ -1,6 +1,7 @@
-package com.ocado.cojesc.temp;
+package com.ocado.cojesc.parser;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 public final class DateParser {
@@ -24,7 +25,7 @@ public final class DateParser {
         if (isDateFormat(facebookDate)) {
             return parseDateFormat(facebookDate);
         } else {
-            return parseHumanFormat(facebookDate);
+            return parseRelativeFormat(facebookDate);
         }
     }
 
@@ -43,13 +44,27 @@ public final class DateParser {
         return LocalDate.of(year, month, day);
     }
 
-    private static boolean isHumanFormat(String facebookDate) {
+    private static boolean isRelativeFormat(String facebookDate) {
         return !isDateFormat(facebookDate);
     }
 
-    private static LocalDate parseHumanFormat(String facebookDate) {
-        // nothing here yet
-        // TODO: implement
-        return LocalDate.of(2010, 10, 10);
+    private static LocalDate parseRelativeFormat(String facebookDate) {
+        String[] split = facebookDate.split(" ");
+        if (split.length != 2) throw new IllegalArgumentException("Could not parse " + facebookDate + " as LocalDate.");
+
+        int number = Integer.parseInt(split[0]);
+        String unit = split[1];
+
+        return switch (unit) {
+            case "d" -> LocalDate.now().minusDays(number);
+            case "h" -> LocalTime.now().getHour() > number ?
+                    LocalDate.now() : LocalDate.now().minusDays(1);
+            case "m" -> LocalTime.now().getHour() > 0 || LocalTime.now().getMinute() > number ?
+                    LocalDate.now() : LocalDate.now().minusDays(1);
+            case "s" ->
+                    LocalTime.now().getHour() > 0 || LocalTime.now().getMinute() > 0 || LocalTime.now().getSecond() > number ?
+                            LocalDate.now() : LocalDate.now().minusDays(1);
+            default -> throw new IllegalArgumentException("Could not parse " + facebookDate + " as LocalDate.");
+        };
     }
 }

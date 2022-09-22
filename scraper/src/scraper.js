@@ -52,8 +52,6 @@ const getPosts = async (facebookId) => {
     const texts = await page.$$eval(facebookConfig.POST_CLASS,
         divs => divs.map(({ innerText }) => innerText));
 
-    await page.screenshot({path: 'out/screen.jpg'})
-
     await browser.close();
     return texts;
 }

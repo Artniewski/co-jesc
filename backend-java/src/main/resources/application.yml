@@ -5,7 +5,7 @@ cojesc:
       facebook-id: podlatarniami
       menu-key-words: [ 'wtorek', 'środa', 'piątek' ]
       facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
-      menu-duration: 5 #days
+      menu-duration: 7 #days
 
 spring.cloud.discovery.client.simple.instances:
   scraper:

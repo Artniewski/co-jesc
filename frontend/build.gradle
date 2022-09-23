@@ -31,13 +31,6 @@ task npmBuild(type: NpmTask) {
 task copyFrontendToBuild(type: Copy) {
     dependsOn 'npmBuild'
 
-    into(project(':backend-java').projectDir.path)
-    from ("$projectDir/build/") {
-        include 'static/'
-        into '/src/main/resources/'
-    }
-    from ("$projectDir/build/") {
-        include 'index.html'
-        into '/src/main/resources/static/'
-    }
+    from "$projectDir/build/"
+    into project(':backend-java').projectDir.path + '/src/main/resources/static'
 }

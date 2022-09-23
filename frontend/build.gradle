@@ -27,9 +27,17 @@ task npmBuild(type: NpmTask) {
     args = ['run','build']
 }
 
-//TODO: fixme :)
+//TODO: make it better :) this is workaroundd and built frontend should not go to backend resources? added them to .gitignore
 task copyFrontendToBuild(type: Copy) {
     dependsOn 'npmBuild'
-    from "$projectDir/build/"
-    into project(':backend-java').buildDir.path + "/resources/"
+
+    into(project(':backend-java').projectDir.path)
+    from ("$projectDir/build/") {
+        include 'static/'
+        into '/src/main/resources/'
+    }
+    from ("$projectDir/build/") {
+        include 'index.html'
+        into '/src/main/resources/static/'
+    }
 }

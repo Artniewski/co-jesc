@@ -21,7 +21,7 @@ app.get("/:fbId/menu", async (req, res) => {
     let fbId = req.params.fbId;
     console.log(fbId)
     try {
-        let posts = await scraper.getPosts(fbId);
+        let posts = await scraper.getPosts(fbId,"text");
         res.send(posts);
     } catch (err) {
         console.error(err);

@@ -41,8 +41,8 @@ public class CacheAwareFacebookRestaurantService {
             log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
 
 //        TODO: remove mocks menu and use scraper
-//            List<String> facebookPostsAsString = mockMenuResponse();
-        List<String> facebookPostsAsString = fbClient.getPosts(restaurant.getFacebookId());
+            List<String> facebookPostsAsString = mockMenuResponse();
+//        List<String> facebookPostsAsString = fbClient.getPosts(restaurant.getFacebookId());
 
             return facebookPostsAsString.stream()
                     .map(post -> FacebookPost.parse(restaurant.getFacebookId(), restaurant.getName(), post))

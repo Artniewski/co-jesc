@@ -6,16 +6,6 @@ cojesc:
       menu-key-words: [ 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek' ]
       facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
       menu-duration: 7 #days
-    - name: xxx
-      facebook-id: xxx
-      menu-key-words: [ 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek' ]
-      facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
-      menu-duration: 7 #days
-    - name: yyy
-      facebook-id: yyy
-      menu-key-words: [ 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek' ]
-      facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
-      menu-duration: 7 #days
 
 spring.cloud.discovery.client.simple.instances:
   scraper:

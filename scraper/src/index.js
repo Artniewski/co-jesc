@@ -27,8 +27,20 @@ app.get("/:fbId/menu", async (req, res) => {
         console.error(err);
         return 500;
     }
-
 })
+
+app.get("/:fbId/html", async (req, res) => {
+    let fbId = req.params.fbId;
+    console.log(fbId)
+    try {
+        let posts = await scraper.getPosts(fbId,"html");
+        res.send(posts);
+    } catch (err) {
+        console.error(err);
+        return 500;
+    }
+})
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

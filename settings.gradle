@@ -9,3 +9,4 @@
 
 rootProject.name = 'co-jesc'
 include 'backend-java'
+include 'frontend'

@@ -1,0 +1,34 @@
+plugins {
+    id "com.github.node-gradle.node" version "3.4.0"
+}
+
+node {
+    version = '16.17.0'
+    download = true
+    workDir = file("${project.projectDir}/src/main/frontend/nodejs")
+    npmWorkDir = file("${project.projectDir}/src/main/frontend/npm")
+    nodeModulesDir = file("${project.projectDir}/src/main/frontend")
+}
+
+task npmInstallDepend(type: NpmTask) {
+    dependsOn 'npmSetup'
+    execOverrides {
+        it.ignoreExitValue = true
+        it.workingDir = 'src/main/frontend'
+    }
+    args = ['install']
+}
+
+task npmBuild(type: NpmTask) {
+    dependsOn 'npmInstallDepend'
+    execOverrides {
+        it.workingDir = 'src/main/frontend'
+    }
+    args = ['run','build']
+}
+print  'jjjj'+project(':backend-java').buildDir.path + "/resources/static/"
+task copyFrontendToBuild(type: Copy) {
+    dependsOn 'npmBuild'
+    from "$projectDir/src/main/frontend/build/"
+    into new File(project(':backend-java').path + "/xxx/resources/static/")
+}

@@ -24,6 +24,10 @@ repositories {
 	mavenCentral()
 }
 
+processResources {
+	dependsOn ':frontend:copyFrontendToBuild'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.microsoft.playwright:playwright:1.25.0'

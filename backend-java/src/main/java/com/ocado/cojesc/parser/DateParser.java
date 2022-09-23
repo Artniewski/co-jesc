@@ -36,7 +36,7 @@ public final class DateParser {
 
     private static LocalDate parseDateFormat(String facebookData) { // 12 September at 11:23, 12 June, 12 June 2021
         String[] split = facebookData.split(" ");
-        int dayPosition = isDaySwitchedWithMonth(split) ? 0 : 1;
+        int dayPosition = !isDaySwitchedWithMonth(split) ? 0 : 1;
         int monthPosition = dayPosition ^ 1;
         int day = Integer.parseInt(split[dayPosition]);
         int month = Arrays.asList(MONTHS).indexOf(split[monthPosition]) + 1;
@@ -49,7 +49,7 @@ public final class DateParser {
 
     private static boolean isDaySwitchedWithMonth (String[] facebookData) {
         List<String> months = Arrays.stream(MONTHS).map(String::toLowerCase).toList();
-        return  (months.contains(facebookData[0]));
+        return (months.contains(facebookData[0].toLowerCase()));
     }
 
     private static boolean isRelativeFormat(String facebookDate) {

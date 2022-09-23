@@ -10,7 +10,7 @@ node {
     nodeModulesDir = file("${project.projectDir}/src/main/frontend")
 }
 
-task npmInstallDepend(type: NpmTask) {
+task npmInstallDependencies(type: NpmTask) {
     dependsOn 'npmSetup'
     execOverrides {
         it.ignoreExitValue = true
@@ -20,7 +20,7 @@ task npmInstallDepend(type: NpmTask) {
 }
 
 task npmBuild(type: NpmTask) {
-    dependsOn 'npmInstallDepend'
+    dependsOn 'npmInstallDependencies'
     execOverrides {
         it.workingDir = 'src/main/frontend'
     }

@@ -26,9 +26,10 @@ task npmBuild(type: NpmTask) {
     }
     args = ['run','build']
 }
-print  'jjjj'+project(':backend-java').buildDir.path + "/resources/static/"
+
+//TODO: fixme :)
 task copyFrontendToBuild(type: Copy) {
     dependsOn 'npmBuild'
-    from "$projectDir/src/main/frontend/build/"
-    into new File(project(':backend-java').path + "/xxx/resources/static/")
+    from "$projectDir/build/"
+    into project(':backend-java').buildDir.path + "/resources/"
 }

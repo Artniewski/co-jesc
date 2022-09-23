@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Slf4j
 @Service
@@ -16,18 +19,24 @@ public class FacebookRestaurantsService {
 
     private final CacheAwareFacebookRestaurantService restaurantService;
 
-    public List<FacebookPost> getAllPosts(List<Restaurant> restaurants) {
+    public List<FacebookPost> getAllPosts(List<Restaurant> restaurants) throws ExecutionException, InterruptedException {
         log.info("Searching for all lunch menus...");
-        List<FacebookPost> allPosts = new LinkedList<>();
+        List<Future<Optional<FacebookPost>>> futures = new LinkedList<>();
         for (Restaurant restaurant : restaurants) {
             log.info("Searching for {} restaurant lunch menu.", restaurant.getName());
-            restaurantService.findNewestMenuPost(restaurant).ifPresentOrElse(
+            futures.add(restaurantService.findNewestMenuPost(restaurant));
+        }
+
+        List<FacebookPost> allPosts = new LinkedList<>();
+        for (Future<Optional<FacebookPost>> f : futures) {
+            var facebookPost = f.get();
+            facebookPost.ifPresent(
                     (p) -> {
                         allPosts.add(p);
-                        log.info("Found Lunch menu for {} restaurant.", restaurant.getName());
-                    },
-                    () -> log.info("Lunch menu not found for {} restaurant", restaurant.getName()));
+                        log.info("Found Lunch menu for {} restaurant.", p.restaurantName());
+                    });
         }
+
         log.info("Found lunch menus for restaurants: {}", allPosts.stream().map(FacebookPost::restaurantName).toList());
         return allPosts;
     }

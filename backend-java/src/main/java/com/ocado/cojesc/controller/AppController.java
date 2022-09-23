@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,9 +19,8 @@ public class AppController {
     private final RestaurantsProvider restaurantsProvider;
 
     @GetMapping("/all")
-    public List<FacebookPost> getAllMenus() {
+    public List<FacebookPost> getAllMenus() throws ExecutionException, InterruptedException {
         List<Restaurant> allRestaurants = restaurantsProvider.getRestaurants();
         return service.getAllPosts(allRestaurants);
     }
-
 }

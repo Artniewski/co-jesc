@@ -3,8 +3,8 @@ package com.ocado.cojesc.service;
 import com.ocado.cojesc.client.ScraperFeignClient;
 import com.ocado.cojesc.parser.FacebookPost;
 import com.ocado.cojesc.restaurant.Restaurant;
+import com.ocado.cojesc.restaurant.RestaurantsProvider;
 import com.ocado.cojesc.validator.FacebookPostValidator;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,25 +14,51 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CacheAwareFacebookRestaurantService {
 
     private static final String CACHE_NAME = "lunch-menu";
 
     private final ScraperFeignClient client;
     private final FacebookPostValidator facebookPostValidator;
+    private final ExecutorService executorService;
+
+    public CacheAwareFacebookRestaurantService(ScraperFeignClient client, FacebookPostValidator facebookPostValidator, RestaurantsProvider restaurantsProvider) {
+        this.client = client;
+        this.facebookPostValidator = facebookPostValidator;
+        this.executorService = Executors.newFixedThreadPool(restaurantsProvider.getRestaurants().size());
+    }
 
     @Cacheable(cacheNames = {CACHE_NAME}, key = "#restaurant.name", unless = "#result == null")
-    public Optional<FacebookPost> findNewestMenuPost(Restaurant restaurant) {
-        log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
+    public Future<Optional<FacebookPost>> findNewestMenuPost(Restaurant restaurant) {
+        return executorService.submit(() -> {
+            log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
 
 //        TODO: remove mocks menu and use scraper
+            List<String> facebookPostsAsString = mockMenuResponse();
 //        List<String> facebookPostsAsString = scraperFeignClient.getPosts(restaurantId);
 
-        List<String> facebookPostsAsString = List.of(
+            return facebookPostsAsString.stream()
+                    .map(post -> FacebookPost.parse(restaurant.getFacebookId(), post))
+                    .filter(facebookPost -> facebookPostValidator.validate(facebookPost, restaurant))
+                    .max(Comparator.naturalOrder());
+        });
+    }
+
+    @Scheduled(cron = "${cojesc.cache.eviction}")
+    @CacheEvict(cacheNames = {CACHE_NAME}, allEntries = true)
+    public void clearCache() {
+        log.info("{} cache evicted", CACHE_NAME);
+    }
+
+    private List<String> mockMenuResponse() throws InterruptedException {
+        Thread.sleep(3000);
+        return List.of(
                 "Pod Latarniami\n19 September at 11:23\n \n · \nZaczynamy nowy tydzień \nPoniedziałek\nOgórkowa z koperkiem i śmietaną \nWolno pieczona łopatka z majerankiem i suszonymi morelami, ziemniaki hasselback z tartym serem gruyere, wrześniowa surówka z tartymi burakami\nWtorek\nMinestrone z grissini i serem Pecorino Romano\nKlopsiki w sosie pomidorowym ze świeżym oregano, kremowe puree ziemniaczane, surówka z marchewki, selera i pora\nŚroda\nKrem z pieczonej papryki i pomidorów ze słonym serem krowim\nKanapka z kotletem schabowym, mizeria ze śmietaną, koperek, jajko sadzone, sałata masłowa, frytki ze skórką, dip z pieczonego czosnku\nCzwartek\nKhao Poon - regionalna zupa z Laosu z mleczkiem kokosowym \nLarb - laotańskie narodowe danie - kurczak z kiełkami, cebulką, chilli, kaffirem i miętą, kao niao (kleisty ryż) i prażonymi orzeszkami ziemnymi\nPiątek\nKrem z dynii z prażonymi pestkami i creme fraiche\nFish and Chips (Ryba w cieście piwnym, frytki w przyprawach cajun, zielona fasolka z masełkiem, sos tatarski z białą cebulką)\nLike\nComment\nShare\n0 comments",
                 "Pod Latarniami\n20 September at 11:23\n \n · \nZaczynamy nowy tydzień \nPoniedziałek\nOgórkowa z koperkiem i śmietaną \nWolno pieczona łopatka z majerankiem i suszonymi morelami, ziemniaki hasselback z tartym serem gruyere, wrześniowa surówka z tartymi burakami\nWtorek\nMinestrone z grissini i serem Pecorino Romano\nKlopsiki w sosie pomidorowym ze świeżym oregano, kremowe puree ziemniaczane, surówka z marchewki, selera i pora\nŚroda\nKrem z pieczonej papryki i pomidorów ze słonym serem krowim\nKanapka z kotletem schabowym, mizeria ze śmietaną, koperek, jajko sadzone, sałata masłowa, frytki ze skórką, dip z pieczonego czosnku\nCzwartek\nKhao Poon - regionalna zupa z Laosu z mleczkiem kokosowym \nLarb - laotańskie narodowe danie - kurczak z kiełkami, cebulką, chilli, kaffirem i miętą, kao niao (kleisty ryż) i prażonymi orzeszkami ziemnymi\nPiątek\nKrem z dynii z prażonymi pestkami i creme fraiche\nFish and Chips (Ryba w cieście piwnym, frytki w przyprawach cajun, zielona fasolka z masełkiem, sos tatarski z białą cebulką)\nLike\nComment\nShare\n0 comments",
                 "Pod Latarniami\n18 September at 11:23\n \n · \nZaczynamy nowy tydzień \nPoniedziałek\nOgórkowa z koperkiem i śmietaną \nWolno pieczona łopatka z majerankiem i suszonymi morelami, ziemniaki hasselback z tartym serem gruyere, wrześniowa surówka z tartymi burakami\nWtorek\nMinestrone z grissini i serem Pecorino Romano\nKlopsiki w sosie pomidorowym ze świeżym oregano, kremowe puree ziemniaczane, surówka z marchewki, selera i pora\nŚroda\nKrem z pieczonej papryki i pomidorów ze słonym serem krowim\nKanapka z kotletem schabowym, mizeria ze śmietaną, koperek, jajko sadzone, sałata masłowa, frytki ze skórką, dip z pieczonego czosnku\nCzwartek\nKhao Poon - regionalna zupa z Laosu z mleczkiem kokosowym \nLarb - laotańskie narodowe danie - kurczak z kiełkami, cebulką, chilli, kaffirem i miętą, kao niao (kleisty ryż) i prażonymi orzeszkami ziemnymi\nPiątek\nKrem z dynii z prażonymi pestkami i creme fraiche\nFish and Chips (Ryba w cieście piwnym, frytki w przyprawach cajun, zielona fasolka z masełkiem, sos tatarski z białą cebulką)\nLike\nComment\nShare\n0 comments",
@@ -47,15 +73,5 @@ public class CacheAwareFacebookRestaurantService {
                 "Pod Latarniami\n16 August\n \n · \nNasze lunche w tym tygodniu\nWtorek\nKrem pomidorowy z serem mozzarella \nKotlet schabowy w panko, frytki z wędzona papryka, mizeria z ogórków gruntowych, rzodkiewki i kefiru … See more\n1\nLike\nComment\nShare\n0 comments",
                 "Pod Latarniami\n8 August\n \n · \nWitamy w nowym tygodniu \nPoniedziałek\nKrem z buraka z białym serem i śmietanką\nŻeberko wieprzowe w sosie z portera truskawkowego, młode ziemniaki podsmażane z boczkiem, sałatka ze świeżego ogórka i pomidora… See more\n2\n1 share\nLike\nComment\nShare\n0 comments"
         );
-
-        return facebookPostsAsString.stream()
-                .map(post -> FacebookPost.parse(restaurant.getFacebookId(), post))
-                .filter(facebookPost -> facebookPostValidator.validate(facebookPost, restaurant)).max(Comparator.naturalOrder());
-    }
-
-    @Scheduled(cron = "${cojesc.cache.eviction}")
-    @CacheEvict(cacheNames = {CACHE_NAME}, allEntries = true)
-    public void clearCache() {
-        log.info("{} cache evicted", CACHE_NAME);
     }
 }

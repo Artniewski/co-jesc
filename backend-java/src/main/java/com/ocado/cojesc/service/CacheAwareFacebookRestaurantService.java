@@ -24,12 +24,12 @@ public class CacheAwareFacebookRestaurantService {
 
     private static final String CACHE_NAME = "lunch-menu";
 
-    private final ScraperFeignClient client;
+    private final ScraperFeignClient fbClient;
     private final FacebookPostValidator facebookPostValidator;
     private final ExecutorService executorService;
 
-    public CacheAwareFacebookRestaurantService(ScraperFeignClient client, FacebookPostValidator facebookPostValidator, RestaurantsProvider restaurantsProvider) {
-        this.client = client;
+    public CacheAwareFacebookRestaurantService(ScraperFeignClient scraperFeignClient, FacebookPostValidator facebookPostValidator, RestaurantsProvider restaurantsProvider) {
+        this.fbClient = scraperFeignClient;
         this.facebookPostValidator = facebookPostValidator;
         this.executorService = Executors.newFixedThreadPool(restaurantsProvider.getRestaurants().size());
     }
@@ -41,7 +41,7 @@ public class CacheAwareFacebookRestaurantService {
 
 //        TODO: remove mocks menu and use scraper
             List<String> facebookPostsAsString = mockMenuResponse();
-//        List<String> facebookPostsAsString = scraperFeignClient.getPosts(restaurantId);
+//        List<String> facebookPostsAsString = fbClient.getPosts(restaurant.getFacebookId());
 
             return facebookPostsAsString.stream()
                     .map(post -> FacebookPost.parse(restaurant.getFacebookId(), post))

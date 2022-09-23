@@ -3,6 +3,7 @@ package com.ocado.cojesc.parser;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 
 public final class DateParser {
     private DateParser() {
@@ -33,15 +34,22 @@ public final class DateParser {
         return Arrays.stream(MONTHS).anyMatch(facebookDate::contains);
     }
 
-    private static LocalDate parseDateFormat(String facebookDate) { // 12 September at 11:23, 12 June, 12 June 2021
-        String[] split = facebookDate.split(" ");
-        int day = Integer.parseInt(split[0]);
-        int month = Arrays.asList(MONTHS).indexOf(split[1]) + 1;
+    private static LocalDate parseDateFormat(String facebookData) { // 12 September at 11:23, 12 June, 12 June 2021
+        String[] split = facebookData.split(" ");
+        int dayPosition = isDaySwitchedWithMonth(split) ? 0 : 1;
+        int monthPosition = dayPosition ^ 1;
+        int day = Integer.parseInt(split[dayPosition]);
+        int month = Arrays.asList(MONTHS).indexOf(split[monthPosition]) + 1;
         int year;
         if (split.length > 2 && split[2].length() == 4) year = Integer.parseInt(split[2]);
         else year = LocalDate.now().getYear();
 
         return LocalDate.of(year, month, day);
+    }
+
+    private static boolean isDaySwitchedWithMonth (String[] facebookData) {
+        List<String> months = Arrays.stream(MONTHS).map(String::toLowerCase).toList();
+        return  (months.contains(facebookData[0]));
     }
 
     private static boolean isRelativeFormat(String facebookDate) {

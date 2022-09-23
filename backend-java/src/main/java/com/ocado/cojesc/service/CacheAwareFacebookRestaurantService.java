@@ -45,7 +45,7 @@ public class CacheAwareFacebookRestaurantService {
 //        List<String> facebookPostsAsString = fbClient.getPosts(restaurant.getFacebookId());
 
             return facebookPostsAsString.stream()
-                    .map(post -> FacebookPost.parse(restaurant.getFacebookId(), post))
+                    .map(post -> FacebookPost.parse(restaurant.getFacebookId(), restaurant.getName(), post))
                     .filter(facebookPost -> facebookPostValidator.validate(facebookPost, restaurant))
                     .max(Comparator.naturalOrder());
         });

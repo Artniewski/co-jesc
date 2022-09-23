@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap');
+.App {
+  position: relative;
+  color: #EFE9DF;
+  padding: 92px 0;
+  padding-left: max(calc((100% - 900px) / 2 + 18px), 18px) !important;
+  padding-right: max(calc((100% - 900px) / 2 + 18px), 18px) !important;
+  background-size: cover;
+  background:
+          url("utils/SoupIcon.svg") repeat-y top left,
+          url("utils/BottleIcon.svg") repeat-y bottom left,
+          url("utils/PizzaIcon.svg") repeat-y top right;
+
+}
+
+.title {
+  font-size: 120px;
+  font-family: 'Anton', sans-serif;
+  text-align: center;
+  color: #D9982E;
+}
+
+.restaurantsList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 92px;
+}
+
+.restaurant {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.name {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 40px;
+
+}
+.menu {
+  font-family: 'Noto Sans Display', sans-serif;
+  font-size: 18px;
+}
+

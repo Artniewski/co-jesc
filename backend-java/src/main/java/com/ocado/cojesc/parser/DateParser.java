@@ -4,11 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public final class DateParser {
-    private DateParser() {
-    }
-
     private static final String[] MONTHS = {"January",
             "February",
             "March",
@@ -21,6 +19,11 @@ public final class DateParser {
             "October",
             "November",
             "December"};
+
+    private static Pattern RELATIVE_FB_DATE_REGEX = Pattern.compile("[0-9]{0,2}([hdms])");
+
+    private DateParser() {
+    }
 
     public static LocalDate parse(String facebookDate) {
         if (isDateFormat(facebookDate)) {
@@ -58,7 +61,9 @@ public final class DateParser {
 
     private static LocalDate parseRelativeFormat(String facebookDate) {
         String[] split = facebookDate.split(" ");
-        if (split.length != 2) throw new IllegalArgumentException("Could not parse " + facebookDate + " as LocalDate.");
+        if (split.length != 2) {
+            split = trySplitRelativeDateFormat(facebookDate);
+        }
 
         int number = Integer.parseInt(split[0]);
         String unit = split[1];
@@ -74,5 +79,20 @@ public final class DateParser {
                             LocalDate.now() : LocalDate.now().minusDays(1);
             default -> throw new IllegalArgumentException("Could not parse " + facebookDate + " as LocalDate.");
         };
+    }
+
+    private static String[] trySplitRelativeDateFormat(String facebookDate) {
+        String[] split = facebookDate.split(" ");
+        if (split.length == 2) {
+            return split;
+        }
+
+        if (RELATIVE_FB_DATE_REGEX.matcher(facebookDate).matches()) {
+            String time = facebookDate.substring(0, facebookDate.length() - 1);
+            String unit = facebookDate.substring(facebookDate.length() - 1);
+            return new String[] {time, unit};
+        }
+
+        throw new IllegalArgumentException("Could not parse " + facebookDate + " as LocalDate.");
     }
 }

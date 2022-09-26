@@ -4,12 +4,10 @@ cojesc:
     - name: Pod Latarniami
       facebook-id: podlatarniami
       menu-key-words: [ 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek' ]
-      facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
       menu-duration: 7 #days
     - name: Setka Bar
       facebook-id: Setka.Wroclaw
-      menu-key-words: [ 'lunche' ]
-      facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
+      menu-key-words: [ 'pyszne', 'lunche', 'czekają' ]
       menu-duration: 7 #days
 
 spring.cloud.discovery.client.simple.instances:

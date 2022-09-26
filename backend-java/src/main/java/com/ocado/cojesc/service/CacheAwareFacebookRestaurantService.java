@@ -35,7 +35,7 @@ public class CacheAwareFacebookRestaurantService {
         this.executorService = Executors.newFixedThreadPool(restaurantsProvider.getRestaurants().size());
     }
 
-    @Cacheable(cacheNames = {CACHE_NAME}, key = "#restaurant.name", unless = "#result == null")
+    @Cacheable(cacheNames = {CACHE_NAME}, key = "#restaurant.name", unless = "#result.get == null")
     public Future<Optional<FacebookPost>> findNewestMenuPost(Restaurant restaurant) {
         return executorService.submit(() -> {
             log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());

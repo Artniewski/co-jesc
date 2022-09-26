@@ -16,8 +16,13 @@ public interface ScraperFeignClient {
             produces = MediaType.APPLICATION_JSON_VALUE)
     List<String> getPosts(@PathVariable String facebookId);
 
-    @RequestMapping(value = "/{facebookId}/mock",
+    @RequestMapping(value = "/{facebookId}/posts",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     List<ScrapedPost> getScrapedPosts(@PathVariable String facebookId);
+
+    @RequestMapping(value = "/{facebookId}/mock",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ScrapedPost> getScrapedMockPosts(@PathVariable String facebookId);
 }

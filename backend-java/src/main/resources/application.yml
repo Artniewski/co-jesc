@@ -4,7 +4,10 @@ cojesc:
     - name: Pod Latarniami
       facebook-id: podlatarniami
       menu-key-words: [ 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek' ]
-      facebook-post-classes: 'g4tp4svg mfclru0v om3e55n1 p8bdhjjv'
+      menu-duration: 7 #days
+    - name: Setka Bar
+      facebook-id: Setka.Wroclaw
+      menu-key-words: [ 'pyszne', 'lunche', 'czekają' ]
       menu-duration: 7 #days
 
 spring.cloud.discovery.client.simple.instances:
@@ -12,3 +15,10 @@ spring.cloud.discovery.client.simple.instances:
     - instanceId: instance1
       serviceId: scraper
       uri: http://localhost:2137
+
+feign:
+  client:
+    config:
+      scraper:
+        connectTimeout: 180000
+        readTimeout: 180000

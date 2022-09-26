@@ -14,6 +14,6 @@ public class FacebookPostValidator {
     private final KeyWordsValidator keyWordsValidator;
 
     public boolean validate(FacebookPost facebookPost, Restaurant restaurant) {
-        return dateValidator.checkDate(restaurant.getMenuDuration(), facebookPost.date()) && keyWordsValidator.validateKeyWords(restaurant, facebookPost.content());
+        return dateValidator.checkDate(restaurant.getMenuDuration(), facebookPost.date()) && keyWordsValidator.validateKeyWords(restaurant, facebookPost.innerText());
     }
 }

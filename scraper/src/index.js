@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 })
 
 
-app.get("/mock/menu", async (req, res) => {
+app.get("/:fbId/mock", async (req, res) => {
     res.send(mockData);
 })
 
@@ -21,7 +21,7 @@ app.get("/:fbId/menu", async (req, res) => {
     let fbId = req.params.fbId;
     console.log(fbId)
     try {
-        let posts = await scraper.getPosts(fbId,"text");
+        let posts = await scraper.getPosts(fbId, "text");
         res.send(posts);
     } catch (err) {
         console.error(err);
@@ -29,18 +29,17 @@ app.get("/:fbId/menu", async (req, res) => {
     }
 })
 
-app.get("/:fbId/html", async (req, res) => {
+app.get("/:fbId/posts", async (req, res) => {
     let fbId = req.params.fbId;
     console.log(fbId)
     try {
-        let posts = await scraper.getPosts(fbId,"html");
+        let posts = await scraper.getPosts(fbId, "posts");
         res.send(posts);
     } catch (err) {
         console.error(err);
         return 500;
     }
 })
-
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

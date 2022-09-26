@@ -44,20 +44,15 @@ async function getPosts(facebookId, contentType) {
     await scrollAndWait(page);
     await scrollAndWait(page);
     await waitFor(2, 4);
-    await page.waitForSelector(facebookConfig.SEE_MORE_SELECTOR)
-    const seeMoreElHandleArray = await page.$$(facebookConfig.SEE_MORE_SELECTOR)
 
-    for (const el of seeMoreElHandleArray) {
-        await waitFor(1, 2);
-        await el.click()
-    }
-
+    await selectClickAndWait(page, facebookConfig.SEE_MORE_SELECTOR)
 
     const texts = []
     await page.waitForSelector(facebookConfig.POST_CLASS)
     const postsElHandleArray = await page.$$(facebookConfig.POST_CLASS)
     for (const element of postsElHandleArray) {
         await waitFor(1, 2);
+        let addElement = true;
         let text = '';
         switch (contentType) {
             case "html":
@@ -65,11 +60,24 @@ async function getPosts(facebookId, contentType) {
                 break;
             case "text":
                 text = await page.evaluate(el => el.innerText, element);
+                if (!text) {
+                    addElement = false;
+                }
+                break;
+            case "posts":
+                let postInnerText = await page.evaluate(el => el.innerText, element);
+                let postInnerHtml = await page.evaluate(el => el.innerHTML, element);
+                text = {"innerText": postInnerText, "innerHtml": postInnerHtml}
+                if (!postInnerText) {
+                    addElement = false;
+                }
                 break;
             default:
                 break;
         }
-        texts.push(text);
+        if (addElement) {
+            texts.push(text);
+        }
     }
 
     await waitFor(2, 3)

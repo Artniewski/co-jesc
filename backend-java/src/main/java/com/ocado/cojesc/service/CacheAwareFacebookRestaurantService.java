@@ -51,6 +51,18 @@ public class CacheAwareFacebookRestaurantService {
         });
     }
 
+    @Cacheable(cacheNames = {CACHE_NAME}, key = "#restaurant.facebookId", unless = "#result == null")
+    public Optional<FacebookPost> findNewestMenuPost2(Restaurant restaurant) {
+        log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
+//        TODO: replace mock with real call
+//        List<ScrapedPost> posts = fbClient.getScrapedPosts(restaurant.getFacebookId());
+        List<ScrapedPost> posts = fbClient.getScrapedMockPosts(restaurant.getFacebookId());
+        return posts.stream()
+                .map(post -> FacebookPost.parse(restaurant.getFacebookId(), restaurant.getName(), post))
+                .filter(facebookPost -> facebookPostValidator.validate(facebookPost, restaurant))
+                .max(Comparator.naturalOrder());
+    }
+
     @Scheduled(cron = "${cojesc.cache.eviction}")
     @CacheEvict(cacheNames = {CACHE_NAME}, allEntries = true)
     public void clearCache() {

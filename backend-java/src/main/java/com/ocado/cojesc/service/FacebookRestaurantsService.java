@@ -40,4 +40,8 @@ public class FacebookRestaurantsService {
         log.info("Found lunch menus for restaurants: {}", allPosts.stream().map(FacebookPost::restaurantName).toList());
         return allPosts;
     }
+
+    public Optional<FacebookPost> findNewestLunchPost(Restaurant restaurant) {
+        return restaurantService.findNewestMenuPost2(restaurant);
+    }
 }

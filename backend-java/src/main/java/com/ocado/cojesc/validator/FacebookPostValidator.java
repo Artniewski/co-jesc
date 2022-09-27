@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class FacebookPostValidator {
-    //todo sprawdz kiedy wywala sie na parsowaniu day i niech to bedzie obsluzone
-    //todo a co jesli jest wiecj postow niz jeden
     private final DateValidator dateValidator;
     private final KeyWordsValidator keyWordsValidator;
 

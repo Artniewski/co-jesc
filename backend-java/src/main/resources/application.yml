@@ -19,11 +19,11 @@ cojesc:
       menu-duration: 1 #days
     - name: India Concept
       facebook-id: indiaconcept
-      menu-key-words: [ 'lunch', 'dnia' ]
+      menu-key-words: [ '𝗟𝗨𝗡𝗖𝗛', '𝗗𝗡𝗜𝗔' ]
       menu-duration: 1 #days
     - name: Thali Wroclove
       facebook-id: thaliwroclove
-      menu-key-words: [ 'lunch', 'dnia' ]
+      menu-key-words: [ '𝐋𝐔𝐍𝐂𝐇', '𝐃𝐍𝐈𝐀' ]
       menu-duration: 1 #days
 
 spring.cloud.discovery.client.simple.instances:

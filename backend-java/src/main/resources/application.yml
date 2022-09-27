@@ -5,10 +5,26 @@ cojesc:
       facebook-id: podlatarniami
       menu-key-words: [ 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek' ]
       menu-duration: 7 #days
+    - name: Doctor's Bar
+      facebook-id: 100042840745400
+      menu-key-words: [ 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek' ]
+      menu-duration: 7 #days
     - name: Setka Bar
       facebook-id: Setka.Wroclaw
       menu-key-words: [ 'pyszne', 'lunche', 'czekają' ]
       menu-duration: 7 #days
+    - name: Folwark Zwierzęcy Mięso i Nalewki
+      facebook-id: animalfarm.wro
+      menu-key-words: [ 'lunch', 'tydzień' ]
+      menu-duration: 1 #days
+    - name: India Concept
+      facebook-id: indiaconcept
+      menu-key-words: [ 'lunch', 'dnia' ]
+      menu-duration: 1 #days
+    - name: Thali Wroclove
+      facebook-id: thaliwroclove
+      menu-key-words: [ 'lunch', 'dnia' ]
+      menu-duration: 1 #days
 
 spring.cloud.discovery.client.simple.instances:
   scraper:

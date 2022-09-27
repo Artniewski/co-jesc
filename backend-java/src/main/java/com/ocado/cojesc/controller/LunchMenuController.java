@@ -14,11 +14,12 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
-public class AppController {
+public class LunchMenuController {
 
     private final FacebookRestaurantsService service;
     private final RestaurantsProvider restaurantsProvider;
 
+    @Deprecated
     @GetMapping("/all")
     public List<FacebookPost> getAllMenus() throws ExecutionException, InterruptedException {
         List<Restaurant> allRestaurants = restaurantsProvider.getRestaurants();

@@ -7,9 +7,7 @@ import com.ocado.cojesc.restaurant.Restaurant;
 import com.ocado.cojesc.restaurant.RestaurantsProvider;
 import com.ocado.cojesc.validator.FacebookPostValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -23,8 +21,6 @@ import java.util.concurrent.Future;
 @Service
 public class CacheAwareFacebookRestaurantService {
 
-    private static final String CACHE_NAME = "lunch-menu";
-
     private final ScraperFeignClient fbClient;
     private final FacebookPostValidator facebookPostValidator;
     private final ExecutorService executorService;
@@ -35,7 +31,7 @@ public class CacheAwareFacebookRestaurantService {
         this.executorService = Executors.newFixedThreadPool(restaurantsProvider.getRestaurants().size());
     }
 
-    @Cacheable(cacheNames = {CACHE_NAME}, key = "#restaurant.name", unless = "#result == null")
+    @Deprecated
     public Future<Optional<FacebookPost>> findNewestMenuPost(Restaurant restaurant) {
         return executorService.submit(() -> {
             log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
@@ -51,22 +47,25 @@ public class CacheAwareFacebookRestaurantService {
         });
     }
 
-    @Cacheable(cacheNames = {CACHE_NAME}, key = "#restaurant.facebookId", unless = "#result == null")
+    @Cacheable(cacheNames = {LunchCacheManager.CACHE_NAME}, key = "#restaurant.facebookId")
     public Optional<FacebookPost> findNewestMenuPost2(Restaurant restaurant) {
         log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
 //        TODO: replace mock with real call
 //        List<ScrapedPost> posts = fbClient.getScrapedPosts(restaurant.getFacebookId());
-        List<ScrapedPost> posts = fbClient.getScrapedMockPosts(restaurant.getFacebookId());
+        List<ScrapedPost> posts = getScrapedPosts(restaurant);
+
         return posts.stream()
                 .map(post -> FacebookPost.parse(restaurant.getFacebookId(), restaurant.getName(), post))
                 .filter(facebookPost -> facebookPostValidator.validate(facebookPost, restaurant))
                 .max(Comparator.naturalOrder());
     }
 
-    @Scheduled(cron = "${cojesc.cache.eviction}")
-    @CacheEvict(cacheNames = {CACHE_NAME}, allEntries = true)
-    public void clearCache() {
-        log.info("{} cache evicted", CACHE_NAME);
+    private List<ScrapedPost> getScrapedPosts(Restaurant restaurant) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return fbClient.getScrapedMockPosts(restaurant.getFacebookId());
     }
-
 }

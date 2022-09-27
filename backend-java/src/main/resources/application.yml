@@ -1,5 +1,7 @@
 cojesc:
-  cache.eviction: 0 0 0 * * *
+  cache.eviction:
+    menus: "0 0 0 * * *" # every day
+    nulls: "* */3 * * * *" # every 3 mins
   restaurants:
     - name: Pod Latarniami
       facebook-id: podlatarniami

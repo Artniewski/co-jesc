@@ -19,6 +19,7 @@ public class FacebookRestaurantsService {
 
     private final CacheAwareFacebookRestaurantService restaurantService;
 
+    @Deprecated
     public List<FacebookPost> getAllPosts(List<Restaurant> restaurants) throws ExecutionException, InterruptedException {
         log.info("Searching for all lunch menus...");
         List<Future<Optional<FacebookPost>>> futures = new LinkedList<>();

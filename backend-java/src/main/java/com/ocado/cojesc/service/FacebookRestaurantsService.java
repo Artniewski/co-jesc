@@ -43,6 +43,12 @@ public class FacebookRestaurantsService {
     }
 
     public Optional<FacebookPost> findNewestLunchPost(Restaurant restaurant) {
-        return restaurantService.findNewestMenuPost2(restaurant);
+        log.info("Searching for {} restaurant lunch menu.", restaurant.getName());
+        Optional<FacebookPost> menu = restaurantService.findNewestMenuPost2(restaurant);
+        menu.ifPresentOrElse(
+                (p) -> log.info("Lunch menu for {} restaurant found.", restaurant.getName()),
+                () -> log.info("Lunch menu for {} restaurant not found.", restaurant.getName())
+        );
+        return menu;
     }
 }

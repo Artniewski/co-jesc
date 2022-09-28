@@ -86,7 +86,6 @@ async function getPosts(facebookId, contentType) {
 }
 
 async function selectClickAndWait(page, selector) {
-    await page.waitForSelector(selector)
     const elHandleArray = await page.$$(selector)
     for (const el of elHandleArray) {
         await waitFor(1, 2);

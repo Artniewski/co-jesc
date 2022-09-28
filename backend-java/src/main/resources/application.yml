@@ -32,6 +32,14 @@ cojesc:
       facebook-id: bulkazmaslemsolny
       menu-key-words: [ 'Lunch time' ]
       menu-duration: 7 #days
+    - name: Wok In
+      facebook-id: WokinWroclaw
+      menu-key-words: [ ' - ' ]
+      menu-duration: 7 #days
+#    - name: Dřevný Kocůr OVO
+#      facebook-id: DrevnyKocurWroclaw
+#      menu-key-words: [ 'lunch' ]
+#      menu-duration: 14 #days
 
 spring.cloud.discovery.client.simple.instances:
   scraper:

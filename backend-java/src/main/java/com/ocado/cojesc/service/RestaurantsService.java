@@ -1,5 +1,6 @@
 package com.ocado.cojesc.service;
 
+import com.ocado.cojesc.demo.FacebookRestaurantService;
 import com.ocado.cojesc.parser.FacebookPost;
 import com.ocado.cojesc.restaurant.Restaurant;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +12,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FacebookRestaurantsService {
+public class RestaurantsService {
 
-    private final CacheAwareFacebookRestaurantService restaurantService;
+    private final FacebookRestaurantService restaurantService;
 
     public Optional<FacebookPost> findNewestLunchPost(Restaurant restaurant) {
         log.info("Searching for {} restaurant lunch menu.", restaurant.getName());

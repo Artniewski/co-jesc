@@ -1,14 +1,12 @@
-package com.ocado.cojesc.service;
+package com.ocado.cojesc.demo;
 
 import com.ocado.cojesc.client.ScrapedPost;
 import com.ocado.cojesc.client.ScraperFeignClient;
-import com.ocado.cojesc.demo.FacebookRestaurantService;
 import com.ocado.cojesc.parser.FacebookPost;
 import com.ocado.cojesc.restaurant.Restaurant;
 import com.ocado.cojesc.validator.FacebookPostValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -17,21 +15,26 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(name = "cojesc.demo.enabled", havingValue = "false")
-public class CacheAwareFacebookRestaurantService implements FacebookRestaurantService {
+@ConditionalOnProperty(name = "cojesc.demo.enabled", havingValue = "true")
+public class DemoFacebookRestaurantService implements FacebookRestaurantService {
 
     private final ScraperFeignClient fbClient;
     private final FacebookPostValidator facebookPostValidator;
 
-    public CacheAwareFacebookRestaurantService(ScraperFeignClient scraperFeignClient, FacebookPostValidator facebookPostValidator) {
+    public DemoFacebookRestaurantService(ScraperFeignClient scraperFeignClient, FacebookPostValidator facebookPostValidator) {
         this.fbClient = scraperFeignClient;
         this.facebookPostValidator = facebookPostValidator;
     }
 
-    @Cacheable(cacheNames = {LunchCacheManager.CACHE_NAME}, key = "#restaurant.facebookId")
     public Optional<FacebookPost> findNewestMenuPost(Restaurant restaurant) {
-        log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
-        List<ScrapedPost> posts = fbClient.getScrapedPosts(restaurant.getFacebookId());
+        log.info("Menu for {} restaurant not found in cache. Loading mock.", restaurant.getName());
+        List<ScrapedPost> posts = fbClient.getScrapedMockPosts(restaurant.getFacebookId());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return posts.stream()
                 .map(post -> FacebookPost.parse(restaurant.getFacebookId(), restaurant.getName(), post))

@@ -3,7 +3,7 @@ package com.ocado.cojesc.controller;
 import com.ocado.cojesc.parser.FacebookPost;
 import com.ocado.cojesc.restaurant.Restaurant;
 import com.ocado.cojesc.restaurant.RestaurantsProvider;
-import com.ocado.cojesc.service.FacebookRestaurantsService;
+import com.ocado.cojesc.service.RestaurantsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LunchMenuController {
 
-    private final FacebookRestaurantsService service;
+    private final RestaurantsService service;
     private final RestaurantsProvider restaurantsProvider;
 
     @GetMapping("/{facebookId}/menu")

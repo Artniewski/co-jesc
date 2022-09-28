@@ -28,6 +28,10 @@ cojesc:
       facebook-id: thaliwroclove
       menu-key-words: [ '𝐋𝐔𝐍𝐂𝐇', '𝐃𝐍𝐈𝐀' ]
       menu-duration: 1 #days
+    - name: Bulka z Maslem
+      facebook-id: bulkazmaslemsolny
+      menu-key-words: [ 'Lunch time' ]
+      menu-duration: 7 #days
 
 spring.cloud.discovery.client.simple.instances:
   scraper:

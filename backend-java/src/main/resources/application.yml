@@ -18,8 +18,8 @@ cojesc:
       menu-duration: 7 #days
     - name: Folwark Zwierzęcy Mięso i Nalewki
       facebook-id: animalfarm.wro
-      menu-key-words: [ 'lunch', 'tydzień' ]
-      menu-duration: 1 #days
+      menu-key-words: [ 'lunch' ]
+      menu-duration: 7 #days
     - name: India Concept
       facebook-id: indiaconcept
       menu-key-words: [ '𝗟𝗨𝗡𝗖𝗛', '𝗗𝗡𝗜𝗔' ]

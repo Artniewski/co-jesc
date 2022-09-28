@@ -1,5 +1,5 @@
 cojesc:
-  demo.enabled: true
+  demo.enabled: false
   cache.eviction:
     menus: "0 0 0 * * *" # every day
     nulls: "0 */3 * * * *" # every 3 mins

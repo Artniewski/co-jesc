@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,13 +17,6 @@ public class LunchMenuController {
 
     private final FacebookRestaurantsService service;
     private final RestaurantsProvider restaurantsProvider;
-
-    @Deprecated
-    @GetMapping("/all")
-    public List<FacebookPost> getAllMenus() throws ExecutionException, InterruptedException {
-        List<Restaurant> allRestaurants = restaurantsProvider.getRestaurants();
-        return service.getAllPosts(allRestaurants);
-    }
 
     @GetMapping("/{facebookId}/menu")
     public List<FacebookPost> restaurantMenu(@PathVariable("facebookId") String facebbokId) {

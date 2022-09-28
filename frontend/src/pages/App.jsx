@@ -5,16 +5,42 @@ import {useEffect, useState} from "react";
 
 function App() {
     const [data, setData] = useState([{}]);
+    const [restaurantsInfo, setRestaurantsInfo] = useState([]);
+
+    async function getRestaurantsInfo() {
+        const response = await fetch('/restaurants');
+        const json = await response.json();
+        setRestaurantsInfo(json)
+    }
+    async function getData(facebookId) {
+        const response = await fetch(`${facebookId}/menu`);
+        const json = await response.json();
+        if(json.length > 0){
+            handleAdd(json[0])
+        }
+    }
+    function isFound(array, restaurant) {
+        array.some(element => {
+            return element.facebookId === restaurant.facebookId;
+        });
+        return false;
+    }
+    function handleAdd(restaurant) {
+        setData(oldArray=> {
+            return isFound(oldArray, restaurant) ? oldArray : [...oldArray, restaurant]
+        })
+    }
+
     useEffect( () => {
-        fetch("/all")
-            .then(response => {
-                return response.json();
-            })
-            .then((r) => {
-                setData(r);
-            })
-            .catch(error => console.log('error:', error));
+        getRestaurantsInfo()
     }, []);
+
+    useEffect(() => {
+        restaurantsInfo.map(restaurantInfo =>
+            getData(restaurantInfo.facebookId)
+        );
+    }, [restaurantsInfo]);
+
     return (
         <div className="App">
             <Title title={"CO JEŚĆ"} />

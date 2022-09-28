@@ -6,9 +6,8 @@ const RestaurantsList = ({data}) =>{
         <div className="restaurantsList">
             <br></br>
             {data.length && data.map(restaurant => {
-                console.log(restaurant.innerHtml)
                     return <Restaurant key={restaurant.facebookId} name={restaurant.restaurantName}
-                                       menu={restaurant.innerHtml}/>
+                                       html={restaurant.innerHtml} text={restaurant.innerText}/>
                 }
             )}
         </div>

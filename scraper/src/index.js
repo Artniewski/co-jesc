@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 2137;
 
 app.use(express.json());
 
+require('events').defaultMaxListeners = 50;
+
 app.get('/', (req, res) => {
     res.send('Welcome')
 })

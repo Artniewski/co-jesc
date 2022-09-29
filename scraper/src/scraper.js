@@ -22,6 +22,8 @@ async function getPosts(facebookId, contentType) {
         deviceScaleFactor: 1,
     });
 
+    page.on('console', (msg) => console.log(`[${msg.type()}] PAGE LOG: ${msg.text()}`));
+
     await page.evaluateOnNewDocument(() => {
         Object.defineProperty(navigator, "language", {
             get: function () {

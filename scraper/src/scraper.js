@@ -43,8 +43,8 @@ async function getPosts(facebookId, contentType) {
     await waitFor(0, 1);
     await waitForAndClick(page);
     await page.waitForSelector(facebookConfig.POST_CLASS)
-    await scrollAndWait(page);
-    await scrollAndWait(page);
+    // await scrollAndWait(page);
+    // await scrollAndWait(page);
     await waitFor(2, 4);
 
     await selectClickAndWait(page, facebookConfig.SEE_MORE_SELECTOR)
@@ -71,6 +71,7 @@ async function getPosts(facebookId, contentType) {
                 let postInnerHtml = await page.evaluate(el => el.innerHTML, element);
                 text = {"innerText": postInnerText, "innerHtml": postInnerHtml}
                 if (!postInnerText) {
+                    console.log("found post with empty innerText")
                     addElement = false;
                 }
                 break;

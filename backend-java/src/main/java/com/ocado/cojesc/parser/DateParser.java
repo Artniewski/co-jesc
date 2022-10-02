@@ -70,12 +70,12 @@ public final class DateParser {
 
         return switch (unit) {
             case "d" -> LocalDate.now().minusDays(number);
-            case "h" -> LocalTime.now().getHour() > number ?
+            case "h" -> LocalTime.now().getHour() >= number ?
                     LocalDate.now() : LocalDate.now().minusDays(1);
-            case "m" -> LocalTime.now().getHour() > 0 || LocalTime.now().getMinute() > number ?
+            case "m" -> LocalTime.now().getHour() > 0 || LocalTime.now().getMinute() >= number ?
                     LocalDate.now() : LocalDate.now().minusDays(1);
             case "s" ->
-                    LocalTime.now().getHour() > 0 || LocalTime.now().getMinute() > 0 || LocalTime.now().getSecond() > number ?
+                    LocalTime.now().getHour() > 0 || LocalTime.now().getMinute() > 0 || LocalTime.now().getSecond() >= number ?
                             LocalDate.now() : LocalDate.now().minusDays(1);
             default -> throw new IllegalArgumentException("Could not parse " + facebookDate + " as LocalDate.");
         };

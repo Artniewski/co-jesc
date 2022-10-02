@@ -69,7 +69,7 @@ public final class DateParser {
         String unit = split[1];
 
         return switch (unit) {
-            case "d" -> LocalDate.now().minusDays(number);
+            case "d" -> LocalDate.now().minusDays(number + 1);
             case "h" -> LocalTime.now().getHour() > number ?
                     LocalDate.now() : LocalDate.now().minusDays(1);
             case "m" -> LocalTime.now().getHour() > 0 || LocalTime.now().getMinute() > number ?

@@ -1,4 +1,4 @@
-package com.ocado.cojesc.service;
+package com.ocado.cojesc.service.cache;
 
 import com.ocado.cojesc.restaurant.Restaurant;
 import com.ocado.cojesc.restaurant.RestaurantsProvider;
@@ -17,10 +17,12 @@ public class LunchCacheManager {
 
     private final CacheManager cacheManager;
     private final RestaurantsProvider restaurantsProvider;
+    private final WeeklyCacheCleaner cacheCleaner;
 
-    public LunchCacheManager(CacheManager cacheManager, RestaurantsProvider restaurantsProvider) {
+    public LunchCacheManager(CacheManager cacheManager, RestaurantsProvider restaurantsProvider, WeeklyCacheCleaner cacheCleaner) {
         this.cacheManager = cacheManager;
         this.restaurantsProvider = restaurantsProvider;
+        this.cacheCleaner = cacheCleaner;
     }
 
     @Scheduled(cron = "${cojesc.cache.eviction.nulls}")
@@ -39,6 +41,7 @@ public class LunchCacheManager {
     @Scheduled(cron = "${cojesc.cache.eviction.menus}")
     @CacheEvict(cacheNames = {LunchCacheManager.CACHE_NAME}, allEntries = true)
     public void clearCache() {
-        log.info("{} cache evicted", CACHE_NAME);
+        restaurantsProvider.getRestaurants()
+                .forEach(cacheCleaner::clearCache);
     }
 }

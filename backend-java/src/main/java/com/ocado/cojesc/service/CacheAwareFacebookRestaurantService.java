@@ -29,7 +29,7 @@ public class CacheAwareFacebookRestaurantService implements FacebookRestaurantSe
         this.facebookPostValidator = facebookPostValidator;
     }
 
-    @Cacheable(cacheNames = {LunchCacheManager.CACHE_NAME}, key = "#restaurant.facebookId")
+    @Cacheable(cacheNames = {LunchCacheManager.LUNCH_MENU_CACHE}, key = "#restaurant.facebookId")
     public Optional<FacebookPost> findNewestMenuPost(Restaurant restaurant) {
         log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
         List<ScrapedPost> posts = fbClient.getScrapedPosts(restaurant.getFacebookId());

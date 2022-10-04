@@ -17,7 +17,7 @@ public class DailyCacheCleaner {
     }
 
     public void clearCache(Restaurant restaurant) {
-        Cache cache = cacheManager.getCache(LunchCacheManager.CACHE_NAME);
+        Cache cache = cacheManager.getCache(LunchCacheManager.LUNCH_MENU_CACHE);
         assert cache != null;
 
         if (restaurant.getMenuDuration() == 1) {

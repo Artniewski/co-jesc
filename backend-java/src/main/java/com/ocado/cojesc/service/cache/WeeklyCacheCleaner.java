@@ -6,6 +6,9 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+
 import static com.ocado.cojesc.service.cache.LunchCacheManager.CACHE_NAME;
 
 @Slf4j
@@ -23,7 +26,7 @@ public class WeeklyCacheCleaner {
     public void clearCache(Restaurant restaurant) {
         Cache cache = cacheManager.getCache(CACHE_NAME);
         assert cache != null;
-        if (restaurant.getMenuDuration() == 7) {
+        if (restaurant.getMenuDuration() == 7 && LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY) {
             cache.evictIfPresent(restaurant.getFacebookId());
             log.info("Evicted {} from cache.", restaurant.getFacebookId());
         } else {

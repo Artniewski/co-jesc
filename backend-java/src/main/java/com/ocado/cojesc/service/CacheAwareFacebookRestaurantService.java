@@ -32,11 +32,20 @@ public class CacheAwareFacebookRestaurantService implements FacebookRestaurantSe
     @Cacheable(cacheNames = {CacheConfig.LUNCH_MENU_CACHE}, key = "#restaurant.facebookId")
     public Optional<FacebookPost> findNewestMenuPost(Restaurant restaurant) {
         log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
+        randomSleep();
         List<ScrapedPost> posts = fbClient.getScrapedPosts(restaurant.getFacebookId());
 
         return posts.stream()
                 .map(post -> FacebookPost.parse(restaurant.getFacebookId(), restaurant.getName(), post))
                 .filter(facebookPost -> facebookPostValidator.validate(facebookPost, restaurant))
                 .max(Comparator.naturalOrder());
+    }
+
+    private void randomSleep() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

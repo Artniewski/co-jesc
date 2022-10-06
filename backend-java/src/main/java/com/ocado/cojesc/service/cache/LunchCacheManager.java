@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class LunchCacheManager {
 
-    public static final String LUNCH_MENU_CACHE = "lunch-menu";
-
     private final CacheManager cacheManager;
     private final RestaurantsProvider restaurantsProvider;
     private final WeeklyCacheCleaner cacheCleaner;
@@ -27,7 +25,7 @@ public class LunchCacheManager {
 
     @Scheduled(cron = "${cojesc.cache.eviction.nulls}")
     public void clearNullValuesFromCache() {
-        Cache cache = cacheManager.getCache(LUNCH_MENU_CACHE);
+        Cache cache = cacheManager.getCache(CacheConfig.LUNCH_MENU_CACHE);
         assert cache != null;
         restaurantsProvider.getRestaurants().stream()
                 .map(Restaurant::getFacebookId)
@@ -35,13 +33,13 @@ public class LunchCacheManager {
                     Cache.ValueWrapper wrapper = cache.get(fbid);
                     if (wrapper != null && wrapper.get() == null) {
                         cache.evictIfPresent(fbid);
-                        log.info("{} evicted from {} cache. It was temporarily cached with null value.", fbid, LUNCH_MENU_CACHE);
+                        log.info("{} evicted from {} cache. It was temporarily cached with null value.", fbid, CacheConfig.LUNCH_MENU_CACHE);
                     }
                 });
     }
 
     @Scheduled(cron = "${cojesc.cache.eviction.menus}")
-    @CacheEvict(cacheNames = {LunchCacheManager.LUNCH_MENU_CACHE}, allEntries = true)
+    @CacheEvict(cacheNames = {CacheConfig.LUNCH_MENU_CACHE}, allEntries = true)
     public void clearCache() {
         restaurantsProvider.getRestaurants()
                 .forEach(cacheCleaner::clearCache);

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
-import static com.ocado.cojesc.service.cache.LunchCacheManager.LUNCH_MENU_CACHE;
+import static com.ocado.cojesc.service.cache.CacheConfig.LUNCH_MENU_CACHE;
 
 @Slf4j
 @Component

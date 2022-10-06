@@ -5,7 +5,7 @@ import com.ocado.cojesc.client.ScraperFeignClient;
 import com.ocado.cojesc.demo.FacebookRestaurantService;
 import com.ocado.cojesc.parser.FacebookPost;
 import com.ocado.cojesc.restaurant.Restaurant;
-import com.ocado.cojesc.service.cache.LunchCacheManager;
+import com.ocado.cojesc.service.cache.CacheConfig;
 import com.ocado.cojesc.validator.FacebookPostValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,7 +29,7 @@ public class CacheAwareFacebookRestaurantService implements FacebookRestaurantSe
         this.facebookPostValidator = facebookPostValidator;
     }
 
-    @Cacheable(cacheNames = {LunchCacheManager.LUNCH_MENU_CACHE}, key = "#restaurant.facebookId")
+    @Cacheable(cacheNames = {CacheConfig.LUNCH_MENU_CACHE}, key = "#restaurant.facebookId")
     public Optional<FacebookPost> findNewestMenuPost(Restaurant restaurant) {
         log.info("Menu for {} restaurant not found in cache. Scraping from FB.", restaurant.getName());
         List<ScrapedPost> posts = fbClient.getScrapedPosts(restaurant.getFacebookId());

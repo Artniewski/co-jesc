@@ -8,10 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class CacheConfig {
+
+    public static final String LUNCH_MENU_CACHE = "lunch-menu";
 
     @Bean
     public CacheManager cacheManager() {
@@ -22,8 +23,6 @@ public class CacheConfig {
     }
 
     private CaffeineCache buildLunchMenuCache() {
-        return new CaffeineCache(LunchCacheManager.LUNCH_MENU_CACHE, Caffeine.newBuilder()
-                .expireAfterWrite(30, TimeUnit.DAYS)
-                .build());
+        return new CaffeineCache(LUNCH_MENU_CACHE, Caffeine.newBuilder().build());
     }
 }
